@@ -1,0 +1,50 @@
+services:
+  grafana:
+    container_name: grafana_analytics
+    build:
+      context: ./grafana
+      dockerfile: dockerfile-grafana
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: passw0rd
+    volumes:
+      - ./grafana/data:/var/lib/grafana
+    ports:
+      - 3000:3000
+
+  metabase:
+    container_name: metabase_analytics
+    build:
+      context: ./metabase
+      dockerfile: dockerfile-metabase
+    volumes:
+      - ./metabase/data:/metabase.db:cached
+    ports:
+      - 3030:3000
+
+  superset:
+    container_name: superset_analytics
+    build:
+      context: ./superset
+      dockerfile: dockerfile-superset
+    volumes:
+      - ./superset/data:/app/superset_home
+    ports:
+      - 8080:8088
+
+  mysql:
+    container_name: mysql_analytics
+    build:
+      context: ./mysql
+      dockerfile: dockerfile-mysql
+    environment:
+      MYSQL_DATABASE: analytics
+      MYSQL_USER: test
+      MYSQL_PASSWORD: passw0rd
+      MYSQL_ROOT_PASSWORD: passw0rd
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    volumes:
+      - ./mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./mysql/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - 3306:3306
