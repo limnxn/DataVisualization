@@ -16,7 +16,7 @@ $ cp yourdumpfile mysql/initdb.d
 ### Start app containers
 
 ```bash
-$ docker-compose up -d
+$ docker compose up -d
 ```
 
 - `3000` Grafana
